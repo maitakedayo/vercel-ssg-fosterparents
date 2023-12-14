@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ベーススタイル　==========*/
+body{
+    color: #222;
+    font-family: "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "ヒラギノ角ゴ Pro W3", sans-serif;
+    line-height: 1.5;
+}
+
+a {
+    color: #0069ff;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    vertical-align: top;
+}
+
+h1 {
+    font-size: 2em; /* Adjust the size as needed */
+}
+  
+h2 {
+    font-size: 1.5em; /* Adjust the size as needed */
+}
+  
+h3 {
+    font-size: 1.17em; /* Commonly recommended 1.17em or 18px */
+}
+  
+h4 {
+    font-size: 1em; /* Normal font size or 16px */
+}
+  
+h5 {
+    font-size: 0.83em; /* Commonly recommended 0.83em or 13px */
+}
+  
+h6 {
+    font-size: 0.67em; /* Commonly recommended 0.67em or 11px */
+}
+  

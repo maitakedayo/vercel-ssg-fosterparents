@@ -1,7 +1,6 @@
 @charset "UTF-8";
 
-/* ベーススタイル　==========*/
-
+/* ベーススタイル　globals.cssへ==========*/
 
 /* コンテンツエリア　==========*/
 .ly_topcont {
@@ -21,6 +20,21 @@
   padding: 60px 15px;
   margin-right: auto;
   margin-left: auto;
+}
+
+@media (max-width: 767px) {
+  .ly_topcont,
+  .ly_cont {
+    max-width: 100%;
+    padding: 30px 15px;
+  }
+}
+
+@media (max-width: 767px) {
+  .bl_topcont.ly_cont__col,
+  .bl_media.ly_cont__col {
+    flex-direction: column; /* カラム配置に変更 */
+  }
 }
 
 .hp_bgcBase__orange {
