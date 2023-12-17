@@ -3,13 +3,13 @@ import { LicenseProcessProps } from 'types/data';
 const LicenseProcessesData = async (): Promise<LicenseProcessProps[]> => {
   return [
     {
-      title: "Utilizing the Foreign Driver’s License Conversion System",
-      text: "Learning Examples for Road Tests for Exchanging your Foreign Driver’s License for a Japanese License",
+      title: "Utilizing the Foreign Drivers License Conversion System",
+      text: "Learning Examples for Road Tests for Exchanging your Foreign Drivers License for a Japanese License",
       btnText: "Check Example Answers",
     },
     {
-      title: "At the Driver’s License Center, taking the on-the-spot license examination (general test)",
-      text: "Learning Examples for the driving test for ordinary passenger vehicles at the Driver’s License Center.",
+      title: "At the Drivers License Center, taking the on-the-spot license examination (general test)",
+      text: "Learning Examples for the driving test for ordinary passenger vehicles at the Drivers License Center.",
       btnText: "Check Example Answers",
     },
     {
