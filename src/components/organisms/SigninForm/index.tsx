@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-
+import { useEffect } from "react"
 
 export type SigninFormData = {
   username: string
@@ -11,8 +11,11 @@ interface SigninFormProps {
 }
 
 const SigninForm = ({ setFormpass }: SigninFormProps) => {
-
-  console.log("SigninForm compo")
+  
+  //レンダ確認
+  useEffect(() => {
+    console.log(`SigninForm compo fresh render`);
+  }); //依存配列なしの場合 render毎実行
 
   // React Hook Formの使用
   const {
@@ -23,7 +26,6 @@ const SigninForm = ({ setFormpass }: SigninFormProps) => {
 
   const onSubmit = (data: SigninFormData) => {
     const { username, password } = data
-
     setFormpass(()=>password)
   }
 
@@ -34,7 +36,11 @@ const SigninForm = ({ setFormpass }: SigninFormProps) => {
           <div className="mb-1">
             {/* サインインユーザー名の入力 */}
             <input className="w-full border-2 rounded"
-              {...register('username', { required: true })}
+              {...register('username', { 
+                required: true,
+                maxLength: 20,
+                pattern: /^[^<>&%$]+$/, // <>&%$などの特定の文字を禁止
+              })}
               name="username"
               type="text"
               placeholder="ユーザ名"
@@ -42,14 +48,18 @@ const SigninForm = ({ setFormpass }: SigninFormProps) => {
             />
             {errors.username && (
               <p className="text-red-600 text-sm pl-2">
-                ユーザ名は必須です
+                ユーザ名は必須で、20文字以内で入力してください。特定の文字（&lt;, &gt;, &, %, $）は使用できません。
               </p>
             )}
           </div>
           <div className="mb-2">
             {/* サインインパスワードの入力 */}
             <input className="w-full border-2 rounded"
-              {...register('password', { required: true })}
+              {...register('password', {
+                required: true,
+                maxLength: 20,
+                pattern: /^[^<>&%$]+$/, // <>&%$などの特定の文字を禁止
+              })}
               name="password"
               type="password"
               placeholder="パスワード"
@@ -57,7 +67,7 @@ const SigninForm = ({ setFormpass }: SigninFormProps) => {
             />
             {errors.password && (
               <p className="text-red-600 text-sm pl-2">
-                パスワードは必須です
+                パスワードは必須で、20文字以内で入力してください。特定の文字（&lt;, &gt;, &, %, $）は使用できません。
               </p>
             )}
           </div>

@@ -1,5 +1,12 @@
+import { useEffect } from "react"
 
 const Footer = () => {
+  
+  //レンダ確認
+  useEffect(() => {
+    console.log(`footer compo fresh render`);
+  }); //依存配列なしの場合 render毎実行
+
   return (
     <footer>
       <div className='flex flex-col'>        

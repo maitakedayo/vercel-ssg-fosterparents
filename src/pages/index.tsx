@@ -1,25 +1,30 @@
-import { NextPage, GetStaticProps } from 'next'
+import { NextPage, InferGetStaticPropsType, GetStaticProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Layout from 'components/templates/Layout'
 import { useState } from 'react'
+import { useEffect } from "react"
 import { ChangeEvent } from "react"
-import SigninForm from 'components/organisms/SigninForm/index'
-import useSWR from 'swr'
-import styles from 'styles/styles.module.css'
+import BlockBtn from 'components/atoms/BlockBtn'
+import React from 'react'
+import { LicenseProcessProps } from 'types/data';
+import LicenseProcessesData from 'components/licenseProcessData';
 
+type HomePageProps = InferGetStaticPropsType<typeof getStaticProps>
+
+const MemoizedBlockBtn = React.memo(BlockBtn)
 
 //---SSG(静的サイト生成StaticGene)でssgMessageを作る
-export const getStaticProps: GetStaticProps<SSGProps> = async (
-  context
-  ) => { //contextは実行関連情報オブジェクト
-  const timestamp = new Date().toLocaleString();
-  const ssgMessage = `${timestamp}: SSG`;
+export const getStaticProps: GetStaticProps = async () => { //contextは実行関連情報オブジェクト
+
+  const licenseProcesses = await LicenseProcessesData();
+
   console.log("SSG内部 compo");
   return {
     props: {
-      ssgMessage,
+      licenseProcesses,
     },
+    // revalidate: 60,  // 60秒ごとに再生成 再生成を無効にする場合、revalidateを指定しないか0に設定
   };
 };
 
@@ -28,23 +33,18 @@ type SSGProps = {
 }
 
 //---親関数コンポ
-const HomePage: NextPage<SSGProps> = (props) => {  
-  const {ssgMessage} = props
-  const [formPass, setFormPass] = useState<string>("")
-  const [blurFlag, setBlurFlag] = useState<boolean>(false);
+const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {  
+  const licenseProcesses: LicenseProcessProps[] = props.licenseProcesses; //SSG
+  //const [blurFlag, setBlurFlag] = useState<boolean>(false);
 
-  console.log(`HomePage compo ${ssgMessage}`)
-
-  //---ログイン照合-s-
-  const fetchDataAndExtractPassword = (...args:Parameters<typeof fetch>) => fetch(...args).then(res => res.text()).then(text => JSON.parse(text)['password'])
-  const apiEndpoint = '/api/hello?id=0'
-  const {data: passwordData, error: fetchError} = useSWR<string, Error>(apiEndpoint , fetchDataAndExtractPassword)
-  const doLogoutAction = ()=>{setFormPass(() => "nillnillnill")}
-  //---e-
+  //レンダ確認
+  useEffect(() => {
+    console.log(`HomePage compo fresh render ----------`);
+  }); //依存配列なしの場合 render毎実行
 
   //blurFlagを変えて再レンダ
   const changeBlur = (e: ChangeEvent<HTMLInputElement>) => {
-    setBlurFlag((blurFlag) => !blurFlag) //e.target.checked
+    //setBlurFlag((blurFlag) => !blurFlag) //e.target.checked
   }
 
   //フォールバック用のjsxを返す
@@ -52,216 +52,63 @@ const HomePage: NextPage<SSGProps> = (props) => {
   if (router.isFallback) {
     return <div>Loading...</div>
   }
-  
+
+  // SSG切り出しコンポ化 
+  const renderBtnCard = (licenseProcesses: LicenseProcessProps[]) => {   
+    return (
+      <>
+        {licenseProcesses.map((lpp: LicenseProcessProps, index: number) => (
+          <MemoizedBlockBtn key={index} title={lpp.title} text={lpp.text} btnText={lpp.btnText} />
+        ))}
+      </>
+    );
+  };
+
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Utilizing the Foreign Driver’s License Conversion System</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
       <Layout>
-        <main>
-          {!(passwordData === formPass)?
-            <div>
-              <SigninForm setFormpass={setFormPass} />
+          <div className="text-center bg-blue-100 p-8">
+            <h5 className="text-2xl font-extrabold text-blue-500 hover:text-blue-700">
+              <a className="">The three ways to obtain a driver's license in Japan are as follows</a>
+            </h5>
+            <h5 className="text-2xl font-extrabold text-blue-500 hover:text-blue-700 mb-4">
+              <a className="">日本で運転免許を取る方法は以下の3点です</a>
+            </h5>
 
-              <div className="flex justify-center py-1 px-2">
-                {/**自作のアニメーションanimate-disappear tailwind.config.jsに設定*/}
-                <div className="animate-appear flex w-96 flex-col justify-center justify-items-center text-center text-red-600 text-xs pl-2">
-                  <p className="w-full rounded px-4 pb-1">pass不一致(暇があればハックしてみてね💛)</p>
-                </div>       
-              </div>
-            </div>
-            :
-            <div className="flex justify-center py-2 px-2 ">
-              <div className="flex w-96 flex-col justify-center justify-items-center">{/**中央配置 */}
-                <button onClick={doLogoutAction} className="w-full bg-gradient-to-br from-blue-300 to-blue-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2" type="submit">
-                  LOGOUT
-                </button>
-              </div>
-            </div>
-          }
+            <ul className="list-disc text-left">
+              <li>ⅰ) Utilizing the Foreign Driver’s License Conversion System</li>
+              <li>ⅱ) At the Driver’s License Center, taking the on-the-spot license examination (general test)</li>
+              <li>ⅲ) Through Designated Driving Schools</li>
+              <li>ⅰ) 外国免許切替制度の利用</li>
+              <li>ⅱ) 飛び込み一発免許試験（一般試験）</li>
+              <li>ⅲ) 指定自動車学校での教習と試験</li>
+            </ul>
+            <p className="text-lg mt-4">
+              Here, we will share the <strong className="text-blue-500">essential tips</strong> for passing the practical or provisional license skills test for foreign license conversion, all <strong className="text-blue-500">completely free</strong>.<br/>
+              Some may argue that there are no secrets to the skills test, but in reality, that's not the case. The mindset and actions of those who pass are different from beginners. Just like the <strong className="text-blue-500">multiple-choice questions</strong> on the written test, there are also ✖️'s on the skills test. So, what becomes an ✖️? To pass, you need to memorize many anti-patterns in advance, but memorizing all traffic laws is not realistic.<br/>
+              Therefore, let's focus on memorizing only the 〇. <strong className="text-orange-500">In fact, those answers are available on the internet.</strong><br/>
+              Knowing those <strong className="text-orange-500">example answers</strong> will allow you to create a set of only the necessary 〇s.
+              Below, we'll explain the important points by acquisition type.
+            </p>
+            <p className="text-lg mt-4">
+              こちらでは<strong className="text-blue-500">完全無料</strong>で外国免許切り替え実技もしくは仮免許技能試験に合格するための<strong className="text-blue-500">秘訣</strong>をお教えします。<br/>
+              技能試験には秘訣がないと主張する方もいますが、実際にはそうではありません。合格した者の考え方と行動は受験初心者とは異なります。<strong className="text-blue-500">筆記試験の〇✖問題</strong>と同じように、技能試験にも✖が存在します。では、何が✖になるのでしょうか。合格するためには、✖となる多くのアンチパターンを事前に覚える必要がありますが、道路交通法の全てを覚えることは現実的ではありません。<br/>
+              そこで、一通りしかない〇を覚えることに焦点を当てましょう。<strong className="text-orange-500">実はその〇はインターネットに落ちています。</strong><br/>
+              その<strong className="text-orange-500">答えの範例</strong>を知ることで、一通りしかない〇を作り出すことができます。
+              以下に取得タイプ別で重要なポイントを解説していきます。
+            </p>
 
-          {(passwordData === formPass)?
-          <div className="form-group h6 pt-3 px-6">
-            <input type="checkbox" className="form-check-input" id="check1" onChange={changeBlur} />
-            <label className="form-check-label" htmlFor="check1">
-              ハック成功ですね💛
-            </label>
+
           </div>
-          :
-          <div></div>
-          }
 
-
-          <section className={styles.ly_topcont}>
-            <div className={`${styles.bl_topcont} ${styles.ly_cont__col}`}>
-
-              <article>
-                <section className={styles.hp_bgcBase__gray}>
-                  <div className={styles.ly_cont}>
-                    <h2 className={`${styles.el_lv2Heading} ${styles.hp_smSpace}`}>
-                      スコティッシュフォールドクリームタビー 里親募集
-                    </h2>
-                    <div className={`${styles.bl_media} ${styles.ly_cont__col}`}>
-                      <figure className={styles.bl_media_imgWrapper}>
-                        <img alt="写真：猫1" src="Images/cat1.png"/>
-                      </figure>
-                      <div className={styles.bl_media_body}>
-                        <h3 className={styles.bl_media_ttl}>
-                          【簡単な紹介】
-                        </h3>
-                        <p className={styles.bl_media_txt}>
-                          5歳の素敵なスコティッシュフォールドクリームタビーの里親を募集しています。この猫はすでに去勢手術を受けており、引っ掻き癖や噛み癖は一切ありません。その上、非常におとなしい性格です。<br/>
-                          日頃のお世話は、愛情と定期的なブラッシングで十分です。おとなしい性格のため、新しい家族とのすぐに打ち解けることが期待できます。
-                        </p>
-                      </div>
-                      {/**<!-- /.bl_media_body --> */}
-                    </div>
-                    {/**<!-- /.bl_media --> */}
-                  </div>
-                  {/**<!-- /.ly_cont --> */}
-                </section>
-                <section className={styles.hp_bgcBase__orange}>
-                  <div className={styles.ly_cont}>
-                    <h2 className={`${styles.el_lv2Heading} ${styles.hp_smSpace}`}>
-                      スコティッシュフォールドクリームタビー 里親募集
-                    </h2>
-                    <div className={`${styles.bl_media} ${styles.bl_media__rev} ${styles.ly_cont__col}`}>
-                      <figure className={styles.bl_media_imgWrapper}>
-                        <img alt="写真：猫2" src="Images/cat2.png"/>
-                      </figure>
-                      <div className={styles.bl_media_body}>
-                        <h3 className={styles.bl_media_ttl}>
-                          【簡単な紹介】
-                        </h3>
-                        <p className={styles.bl_media_txt}>
-                          血統書付きのスコティッシュフォールドクリームタビー！家猫です。<br/>
-                          この素敵な猫との新しい出会いに興味をお持ちの方は、お気軽にご応募・お問い合わせください。
-                        </p>
-                      </div>
-                      {/**<!-- /.bl_media_body --> */}
-                    </div>
-                    {/**<!-- /.bl_media bl_media__rev --> */}
-                  </div>
-                  {/**<!-- /.ly_cont --> */}
-                </section>
-                <section className={styles.hp_bgcBase__gray}>
-                  <div className={styles.ly_cont}>
-                    <ul className={styles.bl_vertPosts}>
-                      <li className={styles.bl_vertPosts_item}>
-                        <div className={styles.bl_vertPosts_header}>
-                          <time className={styles.bl_vertPosts_date}>{ssgMessage}</time>
-                          <ul className={styles.bl_vertPosts_labels}>
-                            <li>
-                              <span className={styles.el_label}>お知らせ</span>
-                            </li>
-                          </ul>
-                        </div>
-                        {/**<!-- /.bl_vertPosts_header --> */}
-                        <a className={styles.bl_vertPosts_ttl}>【サイト】リンクを全て切っています</a>{/**href="#" */}
-                      </li>
-                      <li className={styles.bl_vertPosts_item}>
-                        <div className={styles.bl_vertPosts_header}>
-                          <time className={styles.bl_vertPosts_date}>{ssgMessage}</time>
-                          <ul className={styles.bl_vertPosts_labels}>
-                            <li>
-                              <span className={`${styles.el_label} ${styles.el_label__yellow}`}>お知らせ</span>
-                            </li>
-                          </ul>
-                        </div>
-                        {/**<!-- /.bl_vertPosts_header --> */}
-                        <a className={styles.bl_vertPosts_ttl}>【サイト】リンクを全て切っています</a>{/**href="#" */}
-                      </li>
-                      <li className={styles.bl_vertPosts_item}>
-                        <div className={styles.bl_vertPosts_header}>
-                          <time className={styles.bl_vertPosts_date}>{ssgMessage}</time>
-                          <ul className={styles.bl_vertPosts_labels}>
-                            <li>
-                              <span className={styles.el_label}>お知らせ</span>
-                            </li>
-                          </ul>
-                        </div>
-                        {/**<!-- /.bl_vertPosts_header --> */}
-                        <a className={styles.bl_vertPosts_ttl}>【サイト】リンクを全て切っています</a>{/**href="#" */}
-                      </li>
-                    </ul>
-                  </div>
-                  {/**<!-- /.ly_cont --> */}
-                </section>
-
-                <section className="">
-                  <div className={`${styles.ly_cont} ${styles.ly_cont__col}`}>
-                    <div className={styles.bl_cta}>
-                      <h2 className={styles.bl_cta_ttl}>
-                        お気軽にお問い合わせください
-                      </h2>
-                      <p className={styles.bl_cta_txt}>
-                        気になることがございましたら、お気軽にお問い合わせください
-                      </p>
-                      <a className={styles.el_btn}>X(旧twitter)で問い合わせする</a>{/**href="#" */}
-                    </div>
-                    {/**<!-- /.bl_cta --> */}
-                  </div>
-                  {/**<!-- /.ly_cont ly_cont__col --> */}
-                </section>
-              </article>
-
-              <div className={`${styles.bl_cardUnit} ${styles.bl_cardUnit__col3}`}>
-                <div className={styles.bl_card}>
-                  <figure className={styles.bl_card_imgWrapper}>
-                    <img alt="写真：cat1画面" src="Images/cat1.png"/>
-                  </figure>
-                  <div className={styles.bl_card_body}>
-                    <h3 className={styles.bl_card_ttl}>
-                      画像その1
-                    </h3>
-                    <p className={styles.bl_card_txt}>
-                      窓にもたれ掛かるポーズ。
-                    </p>
-                  </div>
-                  {/**<!-- /.bl_card_body --> */}
-                </div>
-                {/**<!-- /.bl_card --> */}
-                <div className={styles.bl_card}>
-                  <figure className={styles.bl_card_imgWrapper}>
-                    <img alt="写真：cat2画面" src="Images/cat2.png"/>
-                  </figure>
-                  <div className={styles.bl_card_body}>
-                    <h3 className={styles.bl_card_ttl}>
-                      画像その2
-                    </h3>
-                    <p className={styles.bl_card_txt}>
-                      スフィンクスポーズ。
-                    </p>
-                  </div>
-                  {/**<!-- /.bl_card_body --> */}
-                </div>
-                {/**<!-- /.bl_card --> */}
-                <div className={styles.bl_card}>
-                  <figure className={styles.bl_card_imgWrapper}>
-                    <img alt="写真：cat3画面" src="Images/cat3.png"/>
-                  </figure>
-                  <div className={styles.bl_card_body}>
-                    <h3 className={styles.bl_card_ttl}>
-                      画像その3
-                    </h3>
-                    <p className={styles.bl_card_txt}>
-                      睡眠中でリラックスポーズ。
-                    </p>
-                  </div>
-                  {/**<!-- /.bl_card_body --> */}
-                </div>
-                {/**<!-- /.bl_card --> */}
-              </div>
-              {/**<!-- /.bl_cardUnit bl_cardUnit__col3 -->   */} 
-
-            </div>
-            {/**<!-- /.bl_topcont ly_cont__col--> */}
-          </section>
-
-        </main>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5"> {/* スマホは2列 PCは6列*/}
+          {renderBtnCard(licenseProcesses)}
+        </div>
       </Layout>
     </div>
   )

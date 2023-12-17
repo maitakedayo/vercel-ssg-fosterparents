@@ -1,4 +1,5 @@
 import AppLogo from 'components/atoms/AppLogo'
+import { useEffect } from "react"
 
 import {
   Search,
@@ -8,6 +9,11 @@ import {
 
 
 const Header = () => {
+
+  //レンダ確認
+  useEffect(() => {
+    console.log(`Header compo fresh render`);
+  }); //依存配列なしの場合 render毎実行
 
   return (
     <header>
