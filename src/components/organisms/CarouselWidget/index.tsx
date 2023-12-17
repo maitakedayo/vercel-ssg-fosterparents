@@ -49,7 +49,7 @@ const CarouselWidget = () => {
           pagination={{
             clickable: true,
             el: `#swiper-pagination-${id}`,
-            renderBullet(i, className) {
+            renderBullet(i: number, className: string) {
               return `<button class="${className} aria-[current]:bg-primary w-2 h-2 bg-zinc-400/50 inline-block rounded-full"><span class="sr-only">Slide to ${i}</span></button>`;
             },
           }}
