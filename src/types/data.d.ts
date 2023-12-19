@@ -2,7 +2,12 @@
 
 // ボタン用型
 export type LicenseProcessProps = {
-  title: string
-  text: string
+  cardTitle: string
+  cardText: string
   btnText: string
+  introduction: string
+  development: string
+  devImg: string
+  transition: string
+  conclusion: string
 }

@@ -1,5 +1,9 @@
 import { useEffect } from "react"
 import styles from 'styles/styles.module.css'
+import Image from "next/image";
+import slide1 from "/public/Images/cat1.png";
+import slide2 from "/public/Images/cat2.png";
+import slide3 from "/public/Images/cat3.png";
 
 const ForsterParents = () => {
 
@@ -21,7 +25,7 @@ const ForsterParents = () => {
               </h2>
               <div className={`${styles.bl_media} ${styles.ly_cont__col}`}>
                 <figure className={styles.bl_media_imgWrapper}>
-                  <img alt="写真：猫1" src="Images/cat1.png"/>
+                  <Image src={slide1}  alt="cat1" className="" />
                 </figure>
                 <div className={styles.bl_media_body}>
                   <h3 className={styles.bl_media_ttl}>
@@ -45,7 +49,7 @@ const ForsterParents = () => {
               </h2>
               <div className={`${styles.bl_media} ${styles.bl_media__rev} ${styles.ly_cont__col}`}>
                 <figure className={styles.bl_media_imgWrapper}>
-                  <img alt="写真：猫2" src="Images/cat2.png"/>
+                  <Image src={slide2}  alt="cat2" className="" />
                 </figure>
                 <div className={styles.bl_media_body}>
                   <h3 className={styles.bl_media_ttl}>
@@ -124,7 +128,7 @@ const ForsterParents = () => {
         <div className={`${styles.bl_cardUnit} ${styles.bl_cardUnit__col3}`}>
           <div className={styles.bl_card}>
             <figure className={styles.bl_card_imgWrapper}>
-              <img alt="写真：cat1画面" src="Images/cat1.png"/>
+              <Image src={slide1}  alt="cat1" className="" />
             </figure>
             <div className={styles.bl_card_body}>
               <h3 className={styles.bl_card_ttl}>
@@ -139,7 +143,7 @@ const ForsterParents = () => {
           {/**<!-- /.bl_card --> */}
           <div className={styles.bl_card}>
             <figure className={styles.bl_card_imgWrapper}>
-              <img alt="写真：cat2画面" src="Images/cat2.png"/>
+              <Image src={slide2}  alt="cat2" className="" />
             </figure>
             <div className={styles.bl_card_body}>
               <h3 className={styles.bl_card_ttl}>
@@ -154,7 +158,7 @@ const ForsterParents = () => {
           {/**<!-- /.bl_card --> */}
           <div className={styles.bl_card}>
             <figure className={styles.bl_card_imgWrapper}>
-              <img alt="写真：cat3画面" src="Images/cat3.png"/>
+              <Image src={slide3}  alt="cat3" className="" />
             </figure>
             <div className={styles.bl_card_body}>
               <h3 className={styles.bl_card_ttl}>

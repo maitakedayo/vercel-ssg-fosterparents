@@ -1,8 +1,18 @@
 import { useEffect } from "react"
+import React from "react";
 import styles from 'styles/styles.module.css'
+import { MouseEventHandler } from 'react';
 
-const BlockBtn = (props: { title: string, text: string, btnText: string }) => {
-  const { title, text, btnText } = props;
+interface BlockBtnProps {
+  title: string;
+  text: string;
+  btnText: string;
+  onClick: MouseEventHandler<HTMLAnchorElement>;
+  index: number;
+}
+
+const BlockBtn: React.FC<BlockBtnProps> = (props) => {
+  const { title, text, btnText, onClick } = props;
   //レンダ確認
   useEffect(() => {
     console.log(`Btn compo fresh render`);
@@ -19,7 +29,9 @@ const BlockBtn = (props: { title: string, text: string, btnText: string }) => {
           <p className={styles.bl_cta_txt}>
             {text}
           </p>
-          <a className={styles.el_btn}>{btnText}</a>{/**href="#" */}
+          <a className={styles.el_btn}  onClick={(event) => {onClick(event);}}>
+            {btnText}
+          </a>{/**href="#" */}
         </div>
         {/**<!-- /.bl_cta --> */}
       </div>
