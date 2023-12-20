@@ -5,7 +5,7 @@ import Layout from 'components/templates/Layout'
 import { useState } from "react";
 import { useEffect, useCallback, useRef } from "react"
 import BlockBtn from 'components/atoms/BlockBtn'
-import React from 'react'
+import React, { FC } from 'react';
 import { LicenseProcessProps } from 'types/data';
 import LicenseProcessesData from 'components/licenseProcessData';
 import Image from "next/image";
@@ -84,6 +84,23 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
     );
   };
 
+  interface ListRendererProps {
+    items: string;
+  }
+
+  //汎用化で切り出しjsx
+  const ListRenderer: FC<ListRendererProps> = ({ items }) => (
+    <li className="bg-blue-100 rounded-lg p-4">
+      {items.split('・').map((item: string, index: number, array: string[]) => (
+        <React.Fragment key={index}>
+          {index > 0 && "★"}
+          <strong>{item}</strong>
+          {index < array.length - 1 && <br />}
+        </React.Fragment>
+      ))}
+    </li>
+  );
+
   return (
     <div>
       <Head>
@@ -149,7 +166,38 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
                 }
                 <a className="">{licenseProcesses[clickedIndex].transition}</a>
                 <Image src={exAns1Png}  alt="Description of the image" className="my-4" />
-                <h1 className="">{licenseProcesses[clickedIndex].conclusion}</h1>
+                
+                <h3 className="">{licenseProcesses[clickedIndex].examOfBlk}</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5">
+                  <div className="bg-green-300 rounded-lg p-4">
+                    <ListRenderer items={licenseProcesses[clickedIndex].startBlk} />
+                  </div>
+                  <div className="bg-red-300 rounded-lg p-4">
+                    <div className="bg-blue-300 rounded-lg p-4">
+                      <div className="bg-yellow-300 rounded-lg p-4">
+                        <div className="bg-purple-300 rounded-lg p-4">
+                          <ListRenderer items={licenseProcesses[clickedIndex].turnBlk} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-green-300 rounded-lg p-4">
+                    <ListRenderer items={licenseProcesses[clickedIndex].stopBlk} />
+                  </div>
+                </div>
+
+                <h3 className="">{licenseProcesses[clickedIndex].examOfStaticBlk}</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5">
+                  <div className="bg-pink-300 rounded-lg p-4">
+                    <ListRenderer items={licenseProcesses[clickedIndex].pauseStaBlk} />
+                  </div>
+                  <div className="bg-pink-300 rounded-lg p-4">
+                    <ListRenderer items={licenseProcesses[clickedIndex].walkStaBlk} />
+                  </div>
+                  <div className="bg-pink-300 rounded-lg p-4">
+                    <ListRenderer items={licenseProcesses[clickedIndex].poorVisibStaBlk} />
+                  </div>
+                </div>
               </div>
           }
         </div>

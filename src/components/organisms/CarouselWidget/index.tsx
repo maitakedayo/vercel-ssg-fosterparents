@@ -1,25 +1,20 @@
 import { useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import { StaticImageData } from "next/image";
 import "swiper/css";
-import {
-  A11y,
-  Autoplay,
-  Navigation,
-  Pagination,
-  Keyboard,
-} from "swiper/modules";
+import { A11y, Autoplay, Navigation, Pagination, Keyboard } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useId, useState } from "react";
+
+interface CarouselWidgetProps {
+  images: StaticImageData[];
+  autoplay?: boolean;
+  navigation?: boolean;
+  pagination?: boolean;
+}
  
-import slide1 from "/public/Images/cat1.png";
-import slide2 from "/public/Images/cat2.png";
-import slide3 from "/public/Images/cat3.png";
-import slide4 from "/public/Images/cat1.png";
-import slide5 from "/public/Images/cat2.png";
- 
-const CarouselWidget = () => {
-  const items = [slide1, slide2, slide3, slide4, slide5,];
+const CarouselWidget: React.FC<CarouselWidgetProps> = ({ images, autoplay = true, navigation = true, pagination = true }) => {
   const id = useId().replaceAll(":", "");
   const [ready, setReady] = useState(false);
 
@@ -61,7 +56,7 @@ const CarouselWidget = () => {
           centeredSlides={true}
           className={classNames("relative", !ready && "opacity-0")}
         >
-          {items.map((image, i) => (
+          {images.map((image, i) => (
             <SwiperSlide
               key={`slide-${i}`}
               className="relative shadow aspect-video overflow-hidden border rounded-lg"
@@ -95,7 +90,7 @@ const CarouselWidget = () => {
         <div id={`swiper-pagination-${id}`} className="swiper-pagination mt-4 flex items-center gap-2 justify-center"/>
 
         <div className="text-center">
-          <a className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-lg m-4">
+          <a className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-lg m-2">
             Seeking Foster Parents for This Cat
           </a>
         </div>

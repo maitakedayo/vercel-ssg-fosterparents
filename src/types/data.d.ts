@@ -7,7 +7,14 @@ export type LicenseProcessProps = {
   btnText: string
   introduction: string
   development: string
-  devImg: string
+  examOfBlk: string
+  startBlk: string
+  turnBlk: string
+  stopBlk: string
+  examOfStaticBlk: string
+  pauseStaBlk: string
+  walkStaBlk: string
+  poorVisibStaBlk: string
   transition: string
   conclusion: string
 }
