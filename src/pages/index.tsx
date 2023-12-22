@@ -84,13 +84,14 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
     );
   };
 
-  interface ListRendererProps {
+  interface StyledListProps {
     items: string;
+    bgColor: string;
   }
 
   //汎用化で切り出しjsx
-  const ListRenderer: FC<ListRendererProps> = ({ items }) => (
-    <li className="bg-blue-100 rounded-lg p-4">
+  const StyledList: FC<StyledListProps> = ({ items, bgColor }) => (
+    <div className={`${bgColor} rounded-lg p-4`}>
       {items.split('・').map((item: string, index: number, array: string[]) => (
         <React.Fragment key={index}>
           {index > 0 && "★"}
@@ -98,7 +99,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
           {index < array.length - 1 && <br />}
         </React.Fragment>
       ))}
-    </li>
+    </div>
   );
 
   return (
@@ -167,37 +168,33 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
                 <a className="">{licenseProcesses[clickedIndex].transition}</a>
                 <Image src={exAns1Png}  alt="Description of the image" className="my-4" />
                 
-                <h3 className="">{licenseProcesses[clickedIndex].examOfBlk}</h3>
+                <h3 className="m-2">{licenseProcesses[clickedIndex].examOfBlk}</h3>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5">
-                  <div className="bg-green-300 rounded-lg p-4">
-                    <ListRenderer items={licenseProcesses[clickedIndex].startBlk} />
-                  </div>
+                  <StyledList items={licenseProcesses[clickedIndex].startBlk} bgColor="bg-gray-100" />
                   <div className="bg-red-300 rounded-lg p-4">
                     <div className="bg-blue-300 rounded-lg p-4">
                       <div className="bg-yellow-300 rounded-lg p-4">
-                        <div className="bg-purple-300 rounded-lg p-4">
-                          <ListRenderer items={licenseProcesses[clickedIndex].turnBlk} />
-                        </div>
+                          <StyledList items={licenseProcesses[clickedIndex].turnBlk} bgColor="bg-purple-300" />
                       </div>
                     </div>
                   </div>
-                  <div className="bg-green-300 rounded-lg p-4">
-                    <ListRenderer items={licenseProcesses[clickedIndex].stopBlk} />
-                  </div>
+                  <StyledList items={licenseProcesses[clickedIndex].stopBlk}  bgColor="bg-gray-100" />
                 </div>
 
-                <h3 className="">{licenseProcesses[clickedIndex].examOfStaticBlk}</h3>
+                <h3 className="m-2">{licenseProcesses[clickedIndex].examOfStaticBlk}</h3>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5">
-                  <div className="bg-pink-300 rounded-lg p-4">
-                    <ListRenderer items={licenseProcesses[clickedIndex].pauseStaBlk} />
-                  </div>
-                  <div className="bg-pink-300 rounded-lg p-4">
-                    <ListRenderer items={licenseProcesses[clickedIndex].walkStaBlk} />
-                  </div>
-                  <div className="bg-pink-300 rounded-lg p-4">
-                    <ListRenderer items={licenseProcesses[clickedIndex].poorVisibStaBlk} />
-                  </div>
+                  <StyledList items={licenseProcesses[clickedIndex].pauseStaBlk} bgColor="bg-green-300" />
+                  <StyledList items={licenseProcesses[clickedIndex].walkStaBlk} bgColor="bg-green-300" />
+                  <StyledList items={licenseProcesses[clickedIndex].poorVisibStaBlk} bgColor="bg-green-300" />
+                  <StyledList items={licenseProcesses[clickedIndex].proceedCautionStaBlk} bgColor="bg-green-300" />
+                  <StyledList items={licenseProcesses[clickedIndex].descendStaBlk} bgColor="bg-green-300" />
                 </div>
+                
+                <h3 className="m-2">{licenseProcesses[clickedIndex].examOfDynaBlk}</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5">
+                  <StyledList items={licenseProcesses[clickedIndex].priorityLaneOfDynaBlk} bgColor="bg-red-300" />
+                  <StyledList items={licenseProcesses[clickedIndex].trafficOfDynaBlk} bgColor="bg-red-300" />
+                </div>                
               </div>
           }
         </div>

@@ -15,6 +15,11 @@ export type LicenseProcessProps = {
   pauseStaBlk: string
   walkStaBlk: string
   poorVisibStaBlk: string
+  proceedCautionStaBlk: string
+  descendStaBlk: string
+  examOfDynaBlk: string
+  priorityLaneOfDynaBlk: string
+  trafficOfDynaBlk: string
   transition: string
   conclusion: string
 }
